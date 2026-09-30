@@ -3,6 +3,24 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+struct CSRGraph {
+    int num_vertices;
+    std::vector<int> offsets;  // size: num_vertices + 1
+    std::vector<int> edges;    // destination IDs, grouped by source vertex
+};
+
+CSRGraph LoadGraph(const char *filename){
+	std::ifstream(input(filename));
+	std::string line;
+	while(std::getline(input, line)) {
+	
+	}
+}
 
 void worker(int id) {
   for (int i = 0; i < 5; ++i) {
