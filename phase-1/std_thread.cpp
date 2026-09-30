@@ -23,7 +23,7 @@ CSRGraph LoadGraph(const char *filename){
 	unsigned int x = 0;
 	unsigned int refx = x;
 	unsigned int y = 0;
-	// unsigned int max_vertex = 0;	
+	unsigned int max_vertex = 0;	
 	while(std::getline(input, line)) {
 		if(line[0] == '#') {
 			continue;
@@ -31,16 +31,16 @@ CSRGraph LoadGraph(const char *filename){
 		
 		if(std::sscanf(line.c_str(), "%d %d", &x, &y) == 2) {
 			if(x > refx) {
-				o.push_back(edges.size() -1); // because input data is sorted by `x`
+				o.push_back(edges.size() - 1); // because input data is sorted by `x`
 			}
 			refx = x;
 			edges.push_back(y);
-			// The following is a legacy way to determine `max_vertex`.
-			// max_vertex = (x > max_vertex || y > max_vertex) ? ((x > y) ? x : y) : max_vertex; // assumes that the highest vertex number is equivalent to the number of vertices present.
+			// The following is a legacy way to determine list length.
+			 max_vertex = (x > max_vertex || y > max_vertex) ? ((x > y) ? x : y) : max_vertex; // assumes that the highest vertex number is equivalent to the number of vertices present.
 		}	
 				
 	}
-	return CSRGraph {o.size() - 1, o, edges};
+	return CSRGraph {/*o.size() - 1*/ max_vertex + 1, o, edges}; // more elegant. uses length of offset - 1
 
 }
 
@@ -62,9 +62,11 @@ int main() {
   std::cout << "All std::thread workers finished." << std::endl;
   CSRGraph g = LoadGraph("data/soc-Slashdot0902.txt");
   int v = 6;
+  std::cout << "Outdegree of 6: " << g.offsets[v+1] - g.offsets[v] << std::endl;
   for(int i = g.offsets[v]; i < g.offsets[v+1]; ++i){
-  	std::cout << g.edges[i] << ' ';
+  	std::cout << i - g.offsets[v] + 1 << g.edges[i] << ' ';
+	
   }
-  std::cout << std::endl << g.num_vertices << std::endl << g.edges.size() << std::endl;
+  std::cout << std::endl << "Vertices: " << g.num_vertices << std::endl << "Edges: " << g.edges.size() << std::endl;
   return 0;
 }
