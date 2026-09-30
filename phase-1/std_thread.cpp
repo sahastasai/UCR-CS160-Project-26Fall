@@ -68,7 +68,7 @@ int main() {
   int v = 6;
   std::cout << "Outdegree of 6: " << g.offsets[v+1] - g.offsets[v] << std::endl;
   for(int i = g.offsets[v]; i < g.offsets[v+1]; ++i){
-  	std::cout << i - g.offsets[v] + 1 << g.edges[i] << ' ';
+  	std::cout << i - g.offsets[v] + 1 << " " << g.edges[i] << ' ';
 	
   }
   std::cout << std::endl << "Vertices: " << g.num_vertices << std::endl << "Edges: " << g.edges.size() << std::endl;
