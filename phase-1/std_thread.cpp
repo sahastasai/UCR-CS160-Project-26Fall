@@ -23,16 +23,16 @@ CSRGraph LoadGraph(const char *filename){
 	unsigned int x = 0;
 	unsigned int refx = x;
 	unsigned int y = 0;
-	unsigned int max_vertex = 0;	
+	int max_vertex = 0;	
 	while(std::getline(input, line)) {
 		if(line[0] == '#') {
 			continue;
 		}
-		
 		if(std::sscanf(line.c_str(), "%d %d", &x, &y) == 2) {
-			if(x > refx) {
-				o.push_back(edges.size() - 1); // because input data is sorted by `x`
-			}
+			while (refx < x) {
+                o.push_back(edges.size());
+                refx++;
+            }
 			refx = x;
 			edges.push_back(y);
 			// The following is a legacy way to determine list length.
@@ -40,6 +40,10 @@ CSRGraph LoadGraph(const char *filename){
 		}	
 				
 	}
+    while ((int)o.size() <= max_vertex + 1) {
+        o.push_back(edges.size());
+    }
+
 	return CSRGraph {/*o.size() - 1*/ max_vertex + 1, o, edges}; // more elegant. uses length of offset - 1
 
 }
