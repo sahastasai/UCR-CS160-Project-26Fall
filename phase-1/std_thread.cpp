@@ -18,7 +18,9 @@ CSRGraph LoadGraph(const char *filename){
 	std::ifstream input(filename);
 	std::string line;
 	while(std::getline(input, line)) {
-		if(line)	
+		if(line[0] == '#') {
+			continue;
+		}	
 	}
 }
 
