@@ -116,5 +116,10 @@ int main()
   {
     tasks.push_back({src, 0, out_degree, ""});
   }
-  return 0;
+  for (auto &task : tasks)
+  {
+      task.result = task.cb(g, task.src, task.K);
+      std::cout << "Node " << task.src << " out-degree: " << task.result << "\n";
+  }
+return 0;
 }
