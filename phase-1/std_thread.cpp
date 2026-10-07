@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <functional>
 #include <thread>
 #include <fstream>
 #include <sstream>
@@ -54,16 +55,16 @@ struct QueryTask {
 	int K;
 	QueryCallback cb;
 	std::string result;
-}
+};
 
 void RunTasksParallel(const CSRGraph& g, std::vector<QueryTask>& tasks, int num_threads) {
 	std::vector<std::thread> p;
 	for(QueryTask a : tasks) {
 		std::thread t(a.cb, g, a.src, a.K);
-		p.push_back(t);
+		p.push_back(std::move(t));
 	}
 	
-	for(std::thread i : p) {
+	for(std::thread& i : p) {
 		i.join();
 	}
 }
