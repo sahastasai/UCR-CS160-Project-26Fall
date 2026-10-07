@@ -47,7 +47,26 @@ CSRGraph LoadGraph(const char *filename){
 	return CSRGraph {/*o.size() - 1*/ max_vertex + 1, o, edges}; // more elegant. uses length of offset - 1
 
 }
+using QueryCallback = std::function<std::string(const CSRGraph&, int src, int K)>;
 
+struct QueryTask {
+	int src;
+	int K;
+	QueryCallback cb;
+	std::string result;
+}
+
+void RunTasksParallel(const CSRGraph& g, std::vector<QueryTask>& tasks, int num_threads) {
+	std::vector<std::thread> p;
+	for(QueryTask a : tasks) {
+		std::thread t(a.cb, g, a.src, a.K);
+		p.push_back(t);
+	}
+	
+	for(std::thread i : p) {
+		i.join();
+	}
+}
 void worker(int id) {
   for (int i = 0; i < 5; ++i) {
     std::cout << "std::thread worker " << id << ", iteration " << i
